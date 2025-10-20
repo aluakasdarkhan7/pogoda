@@ -20,7 +20,7 @@ def weather_view(request):
     daily: List[Dict] = []
 
     try:
-        url = f"http://api.weatherapi.com/v1/forecast.json?key={API_KEY}&q={city}&days=5&lang=ru"
+        url = f"http://api.weatherapi.com/v1/forecast.json?key={API_KEY}&q={city}&days=10&lang=ru"
         resp = requests.get(url, timeout=10)
         resp.raise_for_status()
         data = resp.json()
@@ -38,6 +38,8 @@ def weather_view(request):
                 'feels_like': current['feelslike_c'],
                 'humidity': current['humidity'],
                 'wind': current['wind_kph'],
+                'pressure': current['pressure_mb'],
+                'uv_index': current['uv'],
                 'description': current['condition']['text'],
                 'icon': 'https:' + current['condition']['icon'],
                 'last_updated': format_time(current['last_updated']),
@@ -57,7 +59,7 @@ def weather_view(request):
                     'icon': 'https:' + hour['condition']['icon'],
                 })
 
-            for day in forecast_days[:5]:
+            for day in forecast_days[:10]:
                 day_date = datetime.strptime(day['date'], '%Y-%m-%d').strftime('%d %b').replace('.', '')
                 daily.append({
                     'date': day_date,

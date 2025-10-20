@@ -1,432 +1,252 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
   <title>Погода</title>
   <style>
-    /* Сброс и базовые */
-    *, *::before, *::after {
+    * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #f0f0f5;
-      max-width: 900px;
-      margin: 50px auto;
-      padding: 25px 40px;
-      border-radius: 20px;
-      box-shadow:
-        0 4px 15px rgba(102, 126, 234, 0.6),
-        0 8px 30px rgba(118, 75, 162, 0.6);
-      backdrop-filter: blur(8px);
-      -webkit-font-smoothing: antialiased;
-      user-select: none;
+      font-family: sans-serif;
+      background: #eef;
+      color: #333;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
     }
 
     h1 {
       text-align: center;
-      font-weight: 800;
-      font-size: 3rem;
-      margin-bottom: 40px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #fff;
-      text-shadow:
-        0 2px 8px rgba(255, 255, 255, 0.6),
-        0 0 20px #a992db;
-      user-select: none;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
     }
 
     form {
       display: flex;
       justify-content: center;
-      margin-bottom: 40px;
-      gap: 0;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
-      border-radius: 50px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.12);
-      transition: background-color 0.3s ease;
-    }
-
-    form:hover {
-      background: rgba(255, 255, 255, 0.25);
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
     input[type="text"] {
-      flex-grow: 1;
-      max-width: 320px;
-      padding: 16px 25px;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 50px 0 0 50px;
-      background: transparent;
-      color: #fff;
-      outline: none;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-shadow: 0 0 3px rgba(0,0,0,0.3);
-      transition: box-shadow 0.3s ease, background-color 0.3s ease;
-    }
-
-    input[type="text"]::placeholder {
-      color: #e1d9ffcc;
-      font-style: italic;
-    }
-
-    input[type="text"]:focus {
-      box-shadow: 0 0 15px 3px #a992dbcc;
-      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px 15px;
+      font-size: 1rem;
+      width: 60%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
 
     button {
-      padding: 16px 30px;
-      font-size: 1.2rem;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #007bff;
+      color: white;
       border: none;
-      background: linear-gradient(45deg, #ff6a00, #ee0979);
-      color: #fff;
+      border-radius: 5px;
       cursor: pointer;
-      border-radius: 0 50px 50px 0;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      box-shadow:
-        0 4px 12px #ff6a00aa,
-        0 6px 15px #ee0979bb;
-      transition: background 0.4s ease, box-shadow 0.4s ease;
     }
 
-    button:hover,
-    button:focus {
-      background: linear-gradient(45deg, #ee0979, #ff6a00);
-      box-shadow:
-        0 6px 20px #ee0979cc,
-        0 8px 25px #ff6a00cc;
-      outline: none;
+    button:hover {
+      background: #0056b3;
     }
 
     .error {
       text-align: center;
-      color: #ff6b6b;
-      margin-bottom: 30px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      text-shadow: 0 0 8px #ff6b6baa;
-      user-select: text;
+      color: red;
+      font-weight: bold;
+      margin-bottom: 20px;
     }
 
     .weather-card {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 25px;
-      padding: 40px 30px;
       text-align: center;
-      box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.15),
-        inset 0 0 40px rgba(255, 255, 255, 0.2);
-      margin-bottom: 50px;
-      backdrop-filter: saturate(180%) blur(15px);
-      user-select: none;
-      transition: transform 0.3s ease;
-    }
-
-    .weather-card:hover {
-      transform: scale(1.04);
-      box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.25),
-        inset 0 0 60px rgba(255, 255, 255, 0.3);
-    }
-
-    .weather-city {
-      font-size: 2.5rem;
-      font-weight: 900;
-      margin-bottom: 15px;
-      color: #ffd369;
-      letter-spacing: 0.06em;
-      text-shadow: 0 0 15px #ffd369aa;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
     }
 
     .weather-icon {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 25px;
-      filter: drop-shadow(0 0 12px #ffd369bb);
-      transition: transform 0.4s ease;
-    }
-
-    .weather-card:hover .weather-icon {
-      transform: rotate(20deg) scale(1.1);
+      width: 100px;
+      height: 100px;
     }
 
     .weather-temp {
-      font-size: 4rem;
-      font-weight: 900;
-      margin: 20px 0 15px;
-      color: #fff;
-      letter-spacing: 0.05em;
-      text-shadow: 0 0 20px #ffd369cc;
-    }
-
-    .weather-desc {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #ffeaa7;
-      margin-bottom: 30px;
-      text-transform: capitalize;
-      text-shadow: 0 0 6px #fff1a3bb;
+      font-size: 2.5rem;
+      font-weight: bold;
     }
 
     .weather-details {
+      margin-top: 15px;
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
       flex-wrap: wrap;
-      gap: 20px;
-      font-size: 1.1rem;
-      color: #f5f5f5cc;
-      font-weight: 600;
+      font-size: 0.95rem;
     }
 
-    .weather-details > div {
-      background: rgba(255, 255, 255, 0.12);
-      padding: 16px 22px;
-      border-radius: 15px;
-      min-width: 130px;
-      box-shadow:
-        0 2px 10px rgba(255, 255, 255, 0.12),
-        inset 0 0 6px rgba(255, 255, 255, 0.25);
-      line-height: 1.4;
-      transition: background-color 0.3s ease;
-      user-select: text;
-    }
-
-    .weather-details > div:hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
-
-    /* Почасовой прогноз */
-    .hourly-forecast {
-      overflow-x: auto;
-      white-space: nowrap;
-      padding-bottom: 20px;
-      margin-bottom: 50px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-      scrollbar-color: #ffd369 transparent;
-    }
-
-    .hourly-forecast::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .hourly-forecast::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .hourly-forecast::-webkit-scrollbar-thumb {
-      background: #ffd369;
-      border-radius: 10px;
-    }
-
-    .hour-block {
-      display: inline-block;
-      background: linear-gradient(145deg, #ffb347, #ffcc33);
-      border-radius: 20px;
-      padding: 18px 20px;
-      margin-right: 16px;
-      width: 110px;
-      color: #4a2e00;
-      text-align: center;
-      box-shadow:
-        3px 3px 6px #cca300,
-        -3px -3px 6px #ffd84d;
-      font-weight: 700;
-      user-select: none;
-      cursor: default;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .hour-block:hover {
-      transform: translateY(-6px) scale(1.05);
-      box-shadow:
-        5px 5px 12px #cca300,
-        -5px -5px 12px #ffd84d;
-    }
-
-    .hour-block img {
-      width: 65px;
-      height: 65px;
-      margin-bottom: 10px;
-      filter: drop-shadow(0 0 4px #4a2e00cc);
-    }
-
-    /* Дневной прогноз */
+    .hourly-forecast,
     .daily-forecast {
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 18px;
-      user-select: none;
+      overflow-x: auto;
+      gap: 10px;
+      padding-bottom: 10px;
     }
 
+    .hour-block,
     .forecast-day {
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      padding: 22px 18px;
-      border-radius: 25px;
+      flex: 0 0 auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
       text-align: center;
-      width: 17%;
-      box-sizing: border-box;
-      color: #e3e9ff;
-      box-shadow:
-        0 6px 15px rgba(38, 0, 115, 0.4),
-        inset 0 0 30px rgba(255, 255, 255, 0.15);
-      font-weight: 700;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: default;
+      min-width: 100px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
 
-    .forecast-day:hover {
-      transform: translateY(-8px) scale(1.07);
-      box-shadow:
-        0 12px 25px rgba(38, 0, 115, 0.7),
-        inset 0 0 40px rgba(255, 255, 255, 0.3);
-    }
-
+    .hour-block img,
     .forecast-day img {
-      width: 75px;
-      height: 75px;
-      margin-bottom: 15px;
-      filter: drop-shadow(0 0 6px #c7d1ffcc);
-      flex-shrink: 0;
-      transition: transform 0.4s ease;
+      width: 60px;
+      height: 60px;
     }
 
-    .forecast-day:hover img {
-      transform: rotate(-10deg) scale(1.1);
-    }
-
-    .forecast-day .date {
-      margin-bottom: 12px;
-      font-weight: 900;
-      font-size: 1.1rem;
-      letter-spacing: 0.03em;
-      text-shadow: 0 0 8px #c7d1ffbb;
-    }
-
-    .forecast-day div:not(.date) {
-      margin: 4px 0;
-      font-size: 1rem;
-      text-transform: capitalize;
-      color: #d1dbff;
-    }
-
-    /* Заголовки разделов */
     h2 {
-      color: #f4f6ffcc;
       text-align: center;
-      margin-bottom: 25px;
-      font-weight: 800;
-      font-size: 2rem;
-      letter-spacing: 0.08em;
-      text-shadow: 0 0 6px #6a11cbcc;
-      user-select: none;
+      margin: 30px 0 15px;
     }
 
-    /* Адаптивность */
-    @media (max-width: 600px) {
-      body {
-        max-width: 95%;
-        padding: 20px 15px;
-      }
-      form {
-        flex-direction: column;
-        border-radius: 25px;
-        gap: 15px;
-      }
-      input[type="text"] {
-        border-radius: 25px;
-        max-width: 100%;
-        text-align: center;
-        font-size: 1.3rem;
-      }
-      button {
-        border-radius: 25px;
-        width: 100%;
-        font-size: 1.3rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-      }
-      .daily-forecast {
-        width: 100%;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        gap: 15px;
-      }
-      .forecast-day {
-        width: 110px;
-        flex-shrink: 0;
-      }
-      .hour-block {
-        width: 100px;
-        padding: 14px 10px;
-      }
+    .health-section {
+      margin-top: 30px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-  </style>
+
+  .health-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .health-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .health-card {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 120px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+
+  .health-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .health-card img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+  }
+
+  .health-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 3px 0;
+  }
+
+  .health-value {
+    font-size: 15px;
+    color: #333;
+  }
+</style>
 </head>
 <body>
   <h1>Погода</h1>
+
   <form method="post" novalidate>
     {% csrf_token %}
     <input type="text" name="city" placeholder="Введите город" required autocomplete="off" />
-    <button type="submit" aria-label="Узнать погоду">Узнать</button>
+    <button type="submit">Узнать</button>
   </form>
 
   {% if error %}
-    <p class="error" role="alert">{{ error }}</p>
+    <p class="error">{{ error }}</p>
   {% endif %}
 
   {% if weather %}
-  <section class="weather-card" aria-label="Текущая погода">
-    <div class="weather-city">{{ weather.city }}</div>
-    <img class="weather-icon" src="{{ weather.icon }}" alt="Иконка погоды" />
-    <div class="weather-temp">{{ weather.temp }} °C</div>
-    <div class="weather-desc">{{ weather.description }}</div>
-    <div class="weather-details">
-      <div>Ощущается как<br><strong>{{ weather.feels_like }} °C</strong></div>
-      <div>Влажность<br><strong>{{ weather.humidity }}%</strong></div>
-      <div>Ветер<br><strong>{{ weather.wind }} км/ч</strong></div>
-      <div>Текущее время<br><strong>{{ weather.last_updated }}</strong></div>
+    <div class="weather-card">
+      <div class="weather-city"><strong>{{ weather.city }}</strong></div>
+      <img class="weather-icon" src="{{ weather.icon }}" alt="Иконка погоды" />
+      <div class="weather-temp">{{ weather.temp }} °C</div>
+      <div>{{ weather.description }}</div>
+      <div class="weather-details">
+        <div>Ощущается: {{ weather.feels_like }} °C</div>
+        <div>Влажность: {{ weather.humidity }}%</div>
+        <div>Ветер: {{ weather.wind }} км/ч</div>
+        <div>Время: {{ weather.last_updated }}</div>
+      </div>
     </div>
-  </section>
 
-  <h2>Почасовой прогноз (следующие 12 часов)</h2>
-  <div class="hourly-forecast" aria-label="Почасовой прогноз погоды">
-    {% for hour in hourly %}
-    <div class="hour-block" role="group" aria-label="Прогноз на {{ hour.time }}">
-      <div>{{ hour.time }}</div>
-      <img src="{{ hour.icon }}" alt="Иконка погоды" />
-      <div>{{ hour.temp }} °C</div>
-      <div style="font-size: 13px;">{{ hour.description }}</div>
+    <h2>Почасовой прогноз</h2>
+    <div class="hourly-forecast">
+      {% for hour in hourly %}
+        <div class="hour-block">
+          <div>{{ hour.time }}</div>
+          <img src="{{ hour.icon }}" alt="Погода" />
+          <div>{{ hour.temp }} °C</div>
+          <div>{{ hour.description }}</div>
+        </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+    
+<div class="health-section">
+  <h3>🌤 Погода и самочувствие</h3>
+  <div class="health-grid">
+    <div class="health-card">
+      <img src="https://cdn-icons-png.flaticon.com/512/3313/3313888.png" alt="pressure">
+      <p class="health-title">Давление</p>
+      <p class="health-value">{{ weather.pressure }} мбар</p>
+    </div>
 
-  <h2>Прогноз на 5 дней</h2>
-  <div class="daily-forecast" aria-label="Прогноз погоды на 5 дней">
-    {% for day in daily %}
-    <div class="forecast-day" role="group" aria-label="Прогноз на {{ day.date }}">
-      <div class="date">{{ day.date }}</div>
-      <img src="{{ day.icon }}" alt="Иконка погоды" />
-      <div>Макс: {{ day.maxtemp }} °C</div>
-      <div>Мин: {{ day.mintemp }} °C</div>
-      <div>{{ day.description }}</div>
+    <div class="health-card">
+      <img src="https://cdn-icons-png.flaticon.com/512/728/728093.png" alt="humidity">
+      <p class="health-title">Влажность</p>
+      <p class="health-value">{{ weather.humidity }}%</p>
     </div>
-    {% endfor %}
+
+    <div class="health-card">
+      <img src="https://cdn-icons-png.flaticon.com/512/553/553416.png" alt="wind">
+      <p class="health-title">Ветер</p>
+      <p class="health-value">{{ weather.wind }} км/ч</p>
+    </div>
+
+    <div class="health-card">
+      <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="uv">
+      <p class="health-title">УФ-индекс</p>
+      <p class="health-value">{{ weather.uv_index }}</p>
+    </div>
   </div>
+</div>
+    <h2>Прогноз на 10 дней</h2>
+    <div class="daily-forecast">
+      {% for day in daily %}
+        <div class="forecast-day">
+          <div class="date">{{ day.date }}</div>
+          <img src="{{ day.icon }}" alt="Погода" />
+          <div>Макс: {{ day.maxtemp }} °C</div>
+          <div>Мин: {{ day.mintemp }} °C</div>
+          <div>{{ day.description }}</div>
+        </div>
+      {% endfor %}
+    </div>
   {% endif %}
 </body>
 </html>
-
